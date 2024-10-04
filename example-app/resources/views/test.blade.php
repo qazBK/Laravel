@@ -6,8 +6,15 @@
     <title>Document</title>
 </head>
 <body>
-    
-@for ($i=0; $i < 10; $i++)
-    The current Valuue is {{i}}<br />
+@php
+    $info = DB::table('infos')->get();
+@endphp
 
+@foreach ($info as $row)
+    <div>  
+        <h2>{{$row->title}}</h2>
+        <code>{{$row->text}}</code>
+    </div>
+@endforeach
+</body>
 </html>
