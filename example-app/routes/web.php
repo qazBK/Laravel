@@ -15,3 +15,5 @@ Route::get('/test2', function ()  {
 Route::get('/test3',[\App\Http\Controllers\Testcontroller::class, 'index']) ->name('test3') ;
 
 Route::get('/calc/{x}/{y}',[\App\Http\Controllers\NameController::class, 'calc']) ->name('calc') ;
+
+Route::get('slist',[\App\Http\Controllers\SlistControllerController::class, 'index']) ->name('slist') ;
