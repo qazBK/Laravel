@@ -16,4 +16,11 @@ Route::get('/test3',[\App\Http\Controllers\Testcontroller::class, 'index']) ->na
 
 Route::get('/calc/{x}/{y}',[\App\Http\Controllers\NameController::class, 'calc']) ->name('calc') ;
 
-Route::get('slist',[\App\Http\Controllers\SlistControllerController::class, 'index']) ->name('slist') ;
+
+Route::get('/car', [\App\Http\Controllers\CarController::class, 'index']) ->name('car');
+
+Route::post('/car', [\App\Http\Controllers\CarController::class, 'insert']);
+
+Route::post('/car', [\App\Http\Controllers\CarController::class, 'insert']);
+
+Route::get('/car/delete/{id}', [\App\Http\Controllers\CarController::class, 'delete'])->name('car.delete');
