@@ -19,7 +19,7 @@
     </div>
     <div>
       <input type="submit"
-       value="Записать... Машину ..." />
+       value="Записать Машину" />
     </div>
 </form>
 
