@@ -11,7 +11,7 @@
       <label for="color">color: </label>
       <input type="text" name="color"
        id="color" required />
-    </div>1
+    </div>
     <div>
       <label for="nambo">nambo: </label>
       <input type="text" name="nambo"

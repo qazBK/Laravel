@@ -5,7 +5,17 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Car extends Model
+use App\Models\color;
+
+class Car extends Model 
 {
     use HasFactory;
+
+    
+    public function color()
+    {
+        return $this->belongsTo(\App\Models\Color::class, 'color_id');
+    } 
+       
+
 }

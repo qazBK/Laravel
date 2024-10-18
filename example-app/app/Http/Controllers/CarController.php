@@ -11,10 +11,13 @@ class CarController extends Controller
     {
 
         $list = Car::all();
+        //$list = Car::with('color')->get();
+        $list_color = Color::all();
 
-        return view("cars", ["cars" => $list]);
+        return view("cars", ["cars" => $list,
+        "list_color" => $list_color,
+    ]);
     }
-
 
     public function insert()
     {
@@ -31,4 +34,6 @@ class CarController extends Controller
 
         return redirect()->route('car');
     }
+
+   
 }
