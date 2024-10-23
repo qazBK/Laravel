@@ -21,6 +21,7 @@ Route::get('/car', [\App\Http\Controllers\CarController::class, 'index']) ->name
 
 Route::post('/car', [\App\Http\Controllers\CarController::class, 'insert']);
 
-Route::post('/car', [\App\Http\Controllers\CarController::class, 'insert']);
+Route::get('/color', [\App\Http\Controllers\ColorController::class, 'index']) ->name('color');
 
-Route::get('/car/delete/{id}', [\App\Http\Controllers\CarController::class, 'delete'])->name('car.delete');
+Route::post('/color', [\App\Http\Controllers\ColorController::class, 'insert']);
+
