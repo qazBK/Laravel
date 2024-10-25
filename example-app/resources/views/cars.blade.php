@@ -18,18 +18,39 @@
 
 <div>
 Форма добавления 
+
+@if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
+
+
+
 <form action="?data=send" method="post">
     @csrf
     <div>
+        @error('brand')
+            <div>Ошибка: {{ $message }}</div>
+        @enderror
       <label for="brand">brand: </label>
       <input type="text" name="brand"
-       id="brand" required />
+       id="brand" @error('brand') style="background-color: yellow;" @enderror   
+       value="{{ old('brand') }}"
+       />
     </div>
     <div>
-      <label for="color_id">color: </label>
+        @error('color')
+            <div>Ошибка: {{ $message }}</div>
+        @enderror
+      <label for="color">color: </label>
 
 
-      <select name="color_id" id="color_id">
+      <select name="color" id="color" @error('color') style="background-color: yellow;" @enderror>
          <option value="">Выберите цвет</option>
          @foreach ($list_color as $row)
          <option value="{{$row->id}}">{{$row->title}}</option>
@@ -37,15 +58,19 @@
        </select>
 
     </div>
-
     <div>
+        @error('nambo')
+            <div>Ошибка: {{ $message }}</div>
+        @enderror
       <label for="nambo">nambo: </label>
-      <input type="text" name="nambo"
-       id="nambo" required />
+      <input type="text" name="nambo"  @error('nambo') style="background-color: yellow;" @enderror
+       id="nambo"
+       value="{{ old('nambo') }}"
+        />
     </div>
     <div>
       <input type="submit"
-       value="Записать Машину" />
+       value="Записать... Машину ..." />
     </div>
 </form>
 

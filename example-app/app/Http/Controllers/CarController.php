@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\car;
+use App\Models\Color;
+
 
 class CarController extends Controller
 {
@@ -21,6 +23,13 @@ class CarController extends Controller
 
     public function insert()
     {
+    //https://laravel.su/docs/11.x/validation
+
+    $validated = request()->validate([
+        'brand' => 'required|max:255',
+        'color' => 'exists:App\Models\color,id',
+        'nambo' => 'required|max:255',
+    ]);
         if (request()->has('nambo')) {
 
             $newCar = new car();

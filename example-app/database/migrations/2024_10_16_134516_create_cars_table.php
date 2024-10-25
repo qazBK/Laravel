@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('brand'); 
             $table->integer('color_id'); 
             $table->foreign('color_id')->references('id')->on('colors'); 
-            $table-> string('nambo');
+            $table->string('nambo');
 
 
         });
