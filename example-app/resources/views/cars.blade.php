@@ -9,9 +9,6 @@
 Список машин
 @endsection
 
-@section('menu')
- Меню
-@endsection
 
 @section('content')
 

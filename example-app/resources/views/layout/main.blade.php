@@ -21,7 +21,7 @@
     @endif    
 
     @sectionMissing('menu')
-    <hr> Нет меню <hr>
+    @include('menu')
     @endif    
 
 
