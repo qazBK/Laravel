@@ -12,8 +12,11 @@ class CarController extends Controller
     public function index()
     {
 
-        $list = Car::all();
+        //$list = Car::all();
         //$list = Car::with('color')->get();
+        $list=Car::where('user_id',auth('web')->user()->id)->get();
+
+
         $list_color = Color::all();
 
         return view("cars", ["cars" => $list,
@@ -29,14 +32,21 @@ class CarController extends Controller
         'brand' => 'required|max:255',
         'color' => 'exists:App\Models\color,id',
         'nambo' => 'required|max:255',
+        
+        
     ]);
         if (request()->has('nambo')) {
+
+            if (request()->user('web')->cannot('create', Car::class)){
+                abort(403);
+            }
 
             $newCar = new car();
 
             $newCar->brand = request()->input('brand');
             $newCar->color = request()->input('color');
             $newCar->nambo = request()->input('nambo');
+            $newCar->User_id = auth('web')->user()->id;
 
             $newCar->save();
         }

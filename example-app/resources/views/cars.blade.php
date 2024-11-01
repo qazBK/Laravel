@@ -26,7 +26,7 @@
     </div>
 @endif
 
-
+@canany(['create'],\App\Model\Car::class)
 
 <form action="?data=send" method="post">
     @csrf
@@ -70,6 +70,8 @@
        value="Записать машину" />
     </div>
 </form>
+
+@endcanany
 
 <h3>Список машин:</h3>
 @foreach ($cars as $row)

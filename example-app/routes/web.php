@@ -23,13 +23,7 @@ Route::get('/test3',[\App\Http\Controllers\Testcontroller::class, 'index']) ->na
 Route::get('/calc/{x}/{y}',[\App\Http\Controllers\NameController::class, 'calc']) ->name('calc') ;
 
 
-Route::get('/car', [\App\Http\Controllers\CarController::class, 'index']) ->name('car');
 
-Route::post('/car', [\App\Http\Controllers\CarController::class, 'insert']);
-
-Route::get('/color', [\App\Http\Controllers\ColorController::class, 'index']) ->name('color');
-
-Route::post('/color', [\App\Http\Controllers\ColorController::class, 'insert']);
 
 
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------/
@@ -48,6 +42,13 @@ Route::middleware("guest:web")->group(function () {
 
 Route::middleware("auth:web")->group(function () {
     Route::get('/logout', [\App\Http\Controllers\AuthController::class, 'logout'])->name('logout');
+    
+    Route::get('/car', [\App\Http\Controllers\CarController::class, 'index']) ->name('car');
 
+    Route::post('/car', [\App\Http\Controllers\CarController::class, 'insert']);
+
+    Route::get('/color', [\App\Http\Controllers\ColorController::class, 'index']) ->name('color');
+
+    Route::post('/color', [\App\Http\Controllers\ColorController::class, 'insert']);
     //Route::post('/posts/comment/{id}', [\App\Http\Controllers\PostController::class, 'comment'])->name('comment');
 });
