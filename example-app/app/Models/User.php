@@ -22,6 +22,10 @@ class User extends Authenticatable
         'password',
     ];
 
+    public function isSuperAdmin()
+    {
+        return $this->user_super;
+    }
     /**
      * The attributes that should be hidden for serialization.
      *

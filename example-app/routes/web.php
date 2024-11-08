@@ -7,10 +7,6 @@ Route::get('/', function () {
 })->name('home');
 
 
-
-Route::get('/', function () {
-    return view('welcome');
-});
 Route::get('/test', function () {
     return view('test');
 });
@@ -46,9 +42,14 @@ Route::middleware("auth:web")->group(function () {
     Route::get('/car', [\App\Http\Controllers\CarController::class, 'index']) ->name('car');
 
     Route::post('/car', [\App\Http\Controllers\CarController::class, 'insert']);
+    
+    Route::get('/car/delete/{id}', [\App\Http\Controllers\CarController::class, 'delete']) ->name('car.delete');
 
     Route::get('/color', [\App\Http\Controllers\ColorController::class, 'index']) ->name('color');
 
     Route::post('/color', [\App\Http\Controllers\ColorController::class, 'insert']);
+
+    Route::get('/color/delete/{id}', [\App\Http\Controllers\ColorController::class, 'delete']) ->name('color.delete');
+
     //Route::post('/posts/comment/{id}', [\App\Http\Controllers\PostController::class, 'comment'])->name('comment');
 });
