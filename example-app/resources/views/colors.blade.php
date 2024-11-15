@@ -2,43 +2,75 @@
 <!--  https://laravel.su/docs/11.x/blade#rassirenie-maketa -->
 
 @section('title')
-Список  цветов
+Цвета машин
 @endsection
 
 @section('head')
-Список цветов
-@endsection
-
-@section('menu')
- Меню
+Цвета машин
 @endsection
 
 @section('content')
 <div>
 
-</div>
-@endsection
+  <div class="p-2">
+    <a class="btn btn-primary" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+      Добавить цвета...
+    </a>
+  </div>
 
-<form action="?data=send" method="post">
-    @csrf
-    <div>
+  <div class="collapse" id="collapseExample">
+    <div class="card card-body">
 
-      <input type="text" name="title"
-       id="title" @error('title') style="background-color: yellow;" @enderror   
-       value="{{ old('title') }}"
-       />
+      <div class="col-md-7 col-lg-8">
+        <h4 class="mb-3">Цвета:</h4>
+        <form action="{{route('color')}}" method="post" class="needs-validation">
+          @csrf
+
+          <div class="row g-3">
+            <div class="col-sm-6">
+              <label for="firstName" class="form-label">Наименование</label>
+              <input type="text" class="form-control" id="title" name="title" placeholder="" value="" required>
+              <div class="invalid-feedback">
+                Наименование цвета
+              </div>
+            </div>
+
+            <hr class="my-4">
+
+            <button class="w-50 btn btn-primary btn-lg" type="submit">Записать</button>
+          </div>
+        </form>
+      </div>
+
+
     </div>
+  </div>
 
-    <div>
-      <input type="submit"
-       value="Записать цвет" />
-    </div>
-</form>
+  <div>
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Наименование</th>
+          <th scope="col">&nbsp;</th>
+          <th scope="col">&nbsp;</th>
+        </tr>
+      </thead>
 
-<h3>Список цветов:</h3>
-@foreach ($color as $row)
-    <div>  
-       {{ $row->title }}
-       <a href="{{route('color.delete',['id' => $row->id])}}"> [Удалить]</a>
-    </div>
-@endforeach
+      <tbody>
+
+        @foreach ($color as $row)
+        <tr>
+          <th scope="row">#</th>
+          <td>{{$row->title}}</td>
+          <td><a class="btn btn-outline-danger" role="button" href="{{route('color.delete',['id' => $row->id])}}">Удалить</a></td>
+          
+        </tr>
+
+        @endforeach
+
+      </tbody>
+    </table>
+  </div>
+  @endsection
+
