@@ -14,7 +14,8 @@ return new class extends Migration
         Schema::create('cars', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            
+            $table->string('nambo');
+            $table->string('brand');
             $table->integer('color_id'); 
             $table->foreign('color_id')->references('id')->on('colors'); 
             $table->integer('user_id');

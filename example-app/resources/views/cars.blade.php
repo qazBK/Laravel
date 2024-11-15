@@ -14,8 +14,12 @@
 
 
 <div>
-Форма добавления 
-
+<div class="p-2">
+    <a class="btn btn-primary" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+    Форма добавления
+    </a>
+  </div>
+  <div class="collapse" id="collapseExample">
 @if ($errors->any())
     <div class="alert alert-danger">
         <ul>
@@ -72,12 +76,12 @@
 </form>
 
 @endcanany
-
+</div>
 <h3>Список машин:</h3>
 @foreach ($cars as $row)
     <div>  
        {{$row->brand}}.
-       {{$row->color}}.
+       {{$row->color->title}}.
        {{$row->nambo}}.
        <a href="{{route('car.delete',['id' => $row->id])}}"> [Удалить]</a>
     
