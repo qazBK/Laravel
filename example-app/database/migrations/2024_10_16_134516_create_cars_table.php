@@ -14,10 +14,11 @@ return new class extends Migration
         Schema::create('cars', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->string('brand'); 
+            
             $table->integer('color_id'); 
             $table->foreign('color_id')->references('id')->on('colors'); 
-            $table->string('nambo');
+            $table->integer('user_id');
+            $table->foreign('user_id')->references('id')->on('users'); 
 
 
         });

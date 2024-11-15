@@ -44,9 +44,9 @@ class CarController extends Controller
             $newCar = new car();
 
             $newCar->brand = request()->input('brand');
-            $newCar->color = request()->input('color');
+            $newCar->color_id = request()->input('color');
             $newCar->nambo = request()->input('nambo');
-            $newCar->User_id = auth('web')->user()->id;
+            $newCar->user_id = auth('web')->user()->id;
 
             $newCar->save();
         }
