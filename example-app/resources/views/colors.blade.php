@@ -72,5 +72,47 @@
       </tbody>
     </table>
   </div>
+  <h3>Динамический запрос:</h3>
+  <ul id="color-list">
+    
+  </ul>
+  <script>
+
+ColorListItem = document.querySelector('#color-list');
+
+function item_add(data) {
+  let li = document.createElement("li");
+  li.innerText = data.title;
+  ColorListItem.appendChild(li);
+}
+
+  function Color_List() {
+
+    console.dir('Запрос');
+
+    fetch('{{route('api.color.index')}}', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+      })
+
+      .then(response => {
+        console.dir(response);
+        return response.json();
+      })
+
+      .then(data_out => {
+        console.dir(data_out);
+        data_out.forEach((item) => item_add(item));
+      });
+  }
+
+
+  let data = {};
+  Color_List();
+
+</script>
+
   @endsection
 

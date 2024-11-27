@@ -52,7 +52,7 @@
 
 
       <select name="color" id="color" @error('color') style="background-color: yellow;" @enderror>
-         <option value="">Выберите цвет</option>
+         <option value="" >Выберите цвет</option>
          @foreach ($list_color as $row)
          <option value="{{$row->id}}">{{$row->title}}</option>
          @endforeach
@@ -70,26 +70,73 @@
         />
     </div>
     <div>
-      <input type="submit"
+      <input class="w-50 btn btn-primary btn-lg" type="submit"
        value="Записать машину" />
-    </div>
+    </div>-
 </form>
 
 @endcanany
 </div>
 <h3>Список машин:</h3>
+<div>
+        <table class="table">
+            <thead>
 @foreach ($cars as $row)
-    <div>  
-       {{$row->brand}}.
-       {{$row->color->title}}.
-       {{$row->nambo}}.
-       <a href="{{route('car.delete',['id' => $row->id])}}"> [Удалить]</a>
-    
-    </div>
+
+                <tr> 
+                    <th scope="row">#</th>
+                    <td>{{$row->brand}}.</td>
+                    <td>{{$row->color->title}}.</td>
+                    <td>{{$row->nambo}}.</td>
+                    <td><a class="btn btn-outline-danger" role="button" href="{{route('car.delete',['id' => $row->id])}}"> [Удалить]</a></td>
+                </tr>
+
 @endforeach
+</thead>
+        <table>
+    </div>
 
-</div>
+<h3>Динамический запрос:</h3>
+  <ul id="car-list">
+    
+  </ul>
+  <script>
 
+CarListItem = document.querySelector('#car-list');
+
+function item_add(data) {
+  let li = document.createElement("li");
+  li.innerText = data.nambo+" "+data.color.title;
+  CarListItem.appendChild(li);
+}
+
+  function Car_List() {
+
+    console.dir('Запрос');
+
+    fetch('{{route('api.car.index')}}', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+      })
+
+      .then(response => {
+        console.dir(response);
+        return response.json();
+      })
+
+      .then(data_out => {
+        console.dir(data_out);
+        data_out.forEach((item) => item_add(item));
+      });
+  }
+
+
+  let data = {};
+  Car_List();
+
+</script>
 
 
 @endsection

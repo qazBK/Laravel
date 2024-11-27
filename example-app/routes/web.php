@@ -53,3 +53,13 @@ Route::middleware("auth:web")->group(function () {
 
     //Route::post('/posts/comment/{id}', [\App\Http\Controllers\PostController::class, 'comment'])->name('comment');
 });
+Route::middleware("auth:web")->group(function () {
+    Route::prefix('api')->group(function () {
+        Route::prefix('v1')->group(function () {
+            Route::name('api.')->group(function () {
+                Route::apiResources(['color' => \App\Http\Controllers\ColorAPIController::class]);
+                Route::apiResources(['car' => \App\Http\Controllers\CarAPIController::class]);
+        });
+    });
+});
+});
