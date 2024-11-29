@@ -11,5 +11,5 @@
 @section('content')
 
 Текст главной страницы
-
+@livewire('counter')
 @endsection
