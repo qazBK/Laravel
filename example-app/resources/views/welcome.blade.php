@@ -12,4 +12,6 @@
 
 Текст главной страницы
 @livewire('counter')
+
+@livewire('listcolors')
 @endsection
