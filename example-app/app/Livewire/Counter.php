@@ -75,4 +75,12 @@ class Counter extends Component
         $this->newValue=$item->title;
         $this->active_edit_color=$id;
     }   
+    public function update_color_id(string $id,string $title)
+    {
+        
+        $item= \App\Models\Color::find($id);
+        $item->title = $title;
+        $item->save();     
+        $this->dispatch('color-update'); 
+    } 
 }
