@@ -1,0 +1,80 @@
+
+BASKET's
+ - id
+ - Customer
+
+ITEM's
+ - ID
+ - TITLE
+ - PRICE
+ - AMOUNT
+ - BASKET_ID
+
+== Создание моделей ==
+1. Создаем BASKET - таблицу в виде модели
+php artisan make:model Basket --migration
+
+Будет создано 2 файла - Модели и Миграции
+Идем в Миграцию и там прописываем все поля
+            $table->id();
+            $table->string('Customer'); - Добавляем это поле
+            $table->timestamps();
+
+Делаем Миграцию чтобы наша таблица создалась
+Выполняем:
+php artisan migrate
+Создается таблица в базе данных...
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!! Если нужно будет откать то вот:
+!! php artisan migrate:rollback --step=1
+!!
+!! Если нужно вообще все сломать - откатить то 
+!! php artisan migrate:reset
+!! затем 
+!! php artisan migrate
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+== Создание Контроллера для вывода списка Basket ==
+php artisan make:controller BasketController
+Контроллер нужен чтобы выводить список Basket 
+и потом выводить содержимое конкретного Basket по ID
+
+Создаем 2 метода 
+   public function index()  - Список всех Basket
+   public function detail($id)  - Вывод деталей определеного Basket и его содержимое
+
+== Создаем пути в Routes web.php ====
+Route::get('/basket/{id}', [\App\Http\Controllers\BasketController::class, 'detail'])->name('basket.detail');
+Route::get('/basket', [\App\Http\Controllers\BasketController::class, 'index'])->name('basket');
+
+== Создание View для Контроллера == 
+php artisan make:view BasketIndex
+Создаем шаблона = View и сейчас прописываем в BasketController - вызов этих View
+    public function index()
+    {
+        $list = \App\Models\Basket::all();
+        return view("BasketIndex", ["list" => $list]);        
+    }
+
+== Заполняем данными таблицу Baskets через редактор базы данных ==
+DB.Browser.for.SQLite-v3.13.0-win64 запускаем DB Browser for SQLite
+и находим файл в проекте \database\database.sqlite
+Правим таблицу (добавляем запись) - Обязательно закрываем базу данных
+
+Возвращаемся в проект и делаем View для вывода списка 
+\resources\views\BasketDetail.blade.php
+Пишем во View и проверяем что выводится что-то
+@foreach ($list as $row)
+      {{$row->Customer}} <br>
+@endforeach
+
+запускаем
+php artisan serve 
+и проверяем http://127.0.0.1:8000/basket
+Должно появится что добавляли в таблицу Basket
+
+
+
+
+php artisan make:view BasketDetail

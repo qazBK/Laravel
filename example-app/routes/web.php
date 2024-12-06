@@ -63,3 +63,6 @@ Route::middleware("auth:web")->group(function () {
     });
 });
 });
+    Route::get('/basket/{id}', [\App\Http\Controllers\BascetController::class, 'detail']) ->name('basket');
+
+    Route::get('/basket', [\App\Http\Controllers\BascetController::class, 'index']) ->name('basket');
