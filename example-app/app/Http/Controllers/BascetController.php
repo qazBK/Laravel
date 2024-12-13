@@ -20,6 +20,7 @@ class BascetController extends Controller
     {
 
         $list = \App\Models\Item::where('Basket_id',$id)->get();
-        return view("BasketDetail", ["list" => $list]);        
+        $basket =\App\Models\Bassket::find($id);
+        return view("BasketDetail", ["list" => $list,"basket"=>$basket]);        
     }
 }
