@@ -74,7 +74,67 @@ php artisan serve
 и проверяем http://127.0.0.1:8000/basket
 Должно появится что добавляли в таблицу Basket
 
+== Создание модели Item ===
+
+Создаем Item - таблицу в виде модели
+php artisan make:model Item --migration
+
+Будет создано 2 файла - Модели и Миграции
+Идем в Миграцию и там прописываем все поля
+            $table->id();
+            $table->string('Title');
+            $table->float('Price');
+            $table->float('Amount');
+            $table->integer('Basket_id');
+            $table->foreign('Basket_id')->references('id')->on('Basket'); //Колонка связи...
+            $table->timestamps();
+
+Делаем Миграцию чтобы наша таблица создалась
+Выполняем:
+php artisan migrate
+Создается таблица в базе данных...
+
+В app\Models\Item.php
+В контроллере добавить метод обработки связи полей Basket()
+
+    public function Basket()
+    {
+        return $this->belongsTo(\App\Models\Basket::class, 'Basket_id');
+    } 
 
 
-
+Создаем View BasketDetail
 php artisan make:view BasketDetail
+
+И в контроллере прописываем выборку Item по BASKET_ID
+
+    public function detail($id)
+    {
+
+        $list = \App\Models\Item::where('Basket_id',$id)->get();
+        return view("BasketDetail", ["list" => $list]);        
+    }
+
+Во View resources\views\BasketDetail.blade.php пишем:
+
+@foreach ($list as $row)
+      {{$row->Title}}
+      Price: {{$row->Price}}
+      Amount: {{$row->Amount}} <br>
+@endforeach
+
+Запускаем php artisan serve  
+Проверяем http://127.0.0.1:8000/basket/1
+Номер 1 - это номер Basket которую смотрим...
+
+
+Добавить в модель связь BASKET с ITEM чтобы я из BASKET мог смотреть что заказано
+
+    public function items()
+    {
+        return $this->hasMany(Item::class);
+    } 
+
+
+
+Генерация корзин и товаров для примера

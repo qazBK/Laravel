@@ -15,4 +15,11 @@ class BascetController extends Controller
     {
         
     }
+    
+    public function detail($id)
+    {
+
+        $list = \App\Models\Item::where('Basket_id',$id)->get();
+        return view("BasketDetail", ["list" => $list]);        
+    }
 }

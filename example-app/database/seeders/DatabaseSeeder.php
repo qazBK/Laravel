@@ -21,10 +21,10 @@ class DatabaseSeeder extends Seeder
             'email' => 'zzz@z.com',
             'password' => Hash::make('123')
         ]);
-        /*
+        
         Bassket::factory()
         ->count(20)
         ->create();
-        */
+        
     }
 }
