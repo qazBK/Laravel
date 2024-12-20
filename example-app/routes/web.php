@@ -66,3 +66,7 @@ Route::middleware("auth:web")->group(function () {
     Route::get('/basket/{id}', [\App\Http\Controllers\BascetController::class, 'detail']) ->name('basket');
 
     Route::get('/basket', [\App\Http\Controllers\BascetController::class, 'index']) ->name('basket');
+
+
+    Route::get('/stret/{id}', [\App\Http\Controllers\StreetController::class, 'detail'])->name('street.detail');
+    Route::get('/stret', [\App\Http\Controllers\StreetController::class, 'index'])->name('street');
