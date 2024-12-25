@@ -1,3 +1,9 @@
-<div>
-    <!-- If you do not have a consistent goal in life, you can not live it in a consistent way. - Marcus Aurelius -->
-</div>
+
+
+@foreach ($list as $row)
+
+    Улица {{$row->Title}}
+    город {{$row->City->Title}}
+    обласьть {{$row->City->Region->Title}} <br><br>
+
+@endforeach
