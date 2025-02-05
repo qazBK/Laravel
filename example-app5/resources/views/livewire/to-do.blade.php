@@ -1,62 +1,4 @@
-<!DOCTYPE html>
-<html lang="ru-RU">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet" />
-    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.standalone.min.css" rel="stylesheet" />
-
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,600;0,700;0,800;1,300;1,400;1,600;1,700;1,800&amp;display=swap" rel="stylesheet" />
-
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootlint/1.1.0/bootlint.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
-</head>
-<style>
-body {
-    font-family: "Open Sans", sans-serif;
-    line-height: 1.6;
-}
-
-.add-todo-input,
-.edit-todo-input {
-    outline: none;
-}
-
-.add-todo-input:focus,
-.edit-todo-input:focus {
-    border: none !important;
-    box-shadow: none !important;
-}
-
-.view-opt-label,
-.date-label {
-    font-size: 0.8rem;
-}
-
-.edit-todo-input {
-    font-size: 1.7rem !important;
-}
-
-.todo-actions {
-    visibility: hidden !important;
-}
-
-.todo-item:hover .todo-actions {
-    visibility: visible !important;
-}
-
-.todo-item.editing .todo-actions .edit-icon {
-    display: none !important;
-}
-
-</style>
-<body>
-@livewire('ToDo');
+<div>
 <div class="container m-5 p-2 rounded mx-auto bg-light shadow">
     <!-- App title section -->
     <div class="row m-1 p-4">
@@ -72,15 +14,17 @@ body {
         <div class="col col-11 mx-auto">
             <div class="row bg-white rounded shadow-sm p-2 add-todo-wrapper align-items-center justify-content-center">
                 <div class="col">
-                    <input class="form-control form-control-lg border-0 add-todo-input bg-transparent rounded" type="text" placeholder="Add new ..">
+                    <input x-ref="new_todo" class="form-control form-control-lg border-0 add-todo-input bg-transparent rounded" type="text" placeholder="Add new ..">
                 </div>
                 <div class="col-auto m-0 px-2 d-flex align-items-center">
-                    <label class="text-secondary my-2 p-0 px-1 view-opt-label due-date-label d-none">Due date not set</label>
+                    <label x-ref="new_date" class="text-secondary my-2 p-0 px-1 view-opt-label due-date-label d-none">Due date not set</label>
                     <i class="fa fa-calendar my-2 px-1 text-primary btn due-date-button" data-toggle="tooltip" data-placement="bottom" title="Set a Due date"></i>
                     <i class="fa fa-calendar-times-o my-2 px-1 text-danger btn clear-due-date-button d-none" data-toggle="tooltip" data-placement="bottom" title="Clear Due date"></i>
                 </div>
                 <div class="col-auto px-0 mx-0 mr-2">
-                    <button type="button" class="btn btn-primary">Add</button>
+                    <button type="button" class="btn btn-primary"
+                    wire:click="create($refs.new_todo.value, $refs.new_date.innerText)"
+                    >Add</button>
                 </div>
             </div>
         </div>
@@ -108,8 +52,59 @@ body {
         </div>
     </div>
     <!-- Todo list section -->
+
+    {{$log}}
+
     <div class="row mx-1 px-5 pb-3 w-80">
         <div class="col mx-auto">
+
+            @foreach ($todo as $row)
+
+
+            <div class="row px-3 align-items-center todo-item rounded">
+                <div class="col-auto m-1 p-0 d-flex align-items-center">
+                    <h2 class="m-0 p-0">
+                        @if ($row->complete == 0)
+                            <i wire:click="check('{{ $row->id }}',1)" class="fa fa-square-o text-primary btn m-0 p-0" data-toggle="tooltip" data-placement="bottom" title="Mark as complete"></i>
+                        @else
+                            <i wire:click="check('{{ $row->id }}',0)" class="fa fa-check-square-o text-primary btn m-0 p-0" data-toggle="tooltip" data-placement="bottom" title="Mark as todo"></i>
+                        @endif
+                    </h2>
+                </div>
+                <div class="col px-1 m-1 d-flex align-items-center">
+                    @if ($row->id == $active_edit)
+                        <input type="text" class="form-control form-control-lg border-0 edit-todo-input rounded px-3" value="{{$row->title}}"
+                        x-ref="title_{{ $row->id }}"
+                        wire:change.debounce="update('{{ $row->id }}', $refs.title_{{ $row->id }}.value)"
+                        
+                        />
+                    @else
+                        <input type="text" class="form-control form-control-lg border-0 edit-todo-input bg-transparent rounded px-3" readonly value="{{$row->title}}" title="" />
+                    @endif
+                </div>
+                <div class="col-auto m-1 p-0 px-3 d-none">
+                </div>
+                <div class="col-auto m-1 p-0 todo-actions">
+                    <div class="row d-flex align-items-center justify-content-end">
+                        <h5 class="m-0 p-0 px-2">
+                            <i x-on:click="$wire.edit({{$row->id}})" class="fa fa-pencil text-info btn m-0 p-0" data-toggle="tooltip" data-placement="bottom" title="Редактировать задание"></i>
+                        </h5>
+                        <h5 class="m-0 p-0 px-2">
+                            <i wire:confirm="Точно удаляем?" wire:click="delete('{{ $row->id }}')" class="fa fa-trash-o text-danger btn m-0 p-0" data-toggle="tooltip" data-placement="bottom" title="Удалить Задание"></i>
+                        </h5>
+                    </div>
+                    <div class="row todo-created-info">
+                        <div class="col-auto d-flex align-items-center pr-2">
+                            <i class="fa fa-info-circle my-2 px-2 text-black-50 btn" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Created date"></i>
+                            <label class="date-label my-2 text-black-50">28th Jun 2020</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            @endforeach
+
+
             <!-- Todo Item 1 -->
             <div class="row px-3 align-items-center todo-item rounded">
                 <div class="col-auto m-1 p-0 d-flex align-items-center">
@@ -212,46 +207,4 @@ body {
         </div>
     </div>
 </div>
-    
-</body>
-<script>
-   window.onload = function () {
-    bootlint.showLintReportForCurrentDocument([], {
-        hasProblems: false,
-        problemFree: false
-    });
-
-    $('[data-toggle="tooltip"]').tooltip();
-
-    function formatDate(date) {
-        return (
-            date.getDate() +
-            "/" +
-            (date.getMonth() + 1) +
-            "/" +
-            date.getFullYear()
-        );
-    }
-
-    var currentDate = formatDate(new Date());
-
-    $(".due-date-button").datepicker({
-        format: "dd/mm/yyyy",
-        autoclose: true,
-        todayHighlight: true,
-        startDate: currentDate,
-        orientation: "bottom right"
-    });
-
-    $(".due-date-button").on("click", function (event) {
-        $(".due-date-button")
-            .datepicker("show")
-            .on("changeDate", function (dateChangeEvent) {
-                $(".due-date-button").datepicker("hide");
-                $(".due-date-label").text(formatDate(dateChangeEvent.date));
-            });
-    });
-};
- 
-</script>
-</html>
+</div>

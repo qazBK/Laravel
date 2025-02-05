@@ -1,4 +1,4 @@
-
+\
 BASKET's
  - id
  - Customer
@@ -136,5 +136,286 @@ php artisan make:view BasketDetail
     } 
 
 
-
+Идем в database\seeders\DatabaseSeeder.php
 Генерация корзин и товаров для примера
+
+В run добавляем 
+ public function run(): void
+    {
+        User::factory()->create([
+            'name' => 'MaxZ',
+            'email' => 'm@maxz.ru',
+            'password' => Hash::make('123'),
+        ]);
+        
+
+        Basket::factory()
+        ->count(20)
+        ->has(ITEM::factory()->count(3))
+        ->create();
+    }
+
+Создаем 2 фабрики 
+
+ php artisan make:factory BasketFactory
+ php artisan make:factory ItemFactory
+ 
+ В эти фабрики прописывем как заполнять поля для случайных данных
+ В database\factories\BasketFactory.php
+
+   public function definition(): array
+    {
+        return [
+            'Customer' => $this->faker->name(), //Имя любое
+        ];
+    }
+
+
+ В database\factories\ItemFactory.php
+
+     public function definition(): array
+    {
+        return [
+            'Title' => $this->faker->text(100),
+            'Price' => $this->faker->randomNumber(3),
+            'Amount' => $this->faker->randomNumber(2),
+        ];
+
+    }
+
+
+Засеиваем базу данных        
+
+Метод без стирания данных - но нельзя дубли (например users)
+php artisan db:seed
+
+Метод со стиранием и засеиванием
+php artisan migrate:fresh --seed
+
+
+
+Новые 3 таблицы 
+Region
+    - id
+    - Title
+City
+    - id
+    - Title
+    - Region_id
+
+Street
+    - id
+    - Title
+    - City_id
+
+
+Таблица 1: Области
+
+ID	Область
+1	Свердловская
+2	Тюменская
+3	Челябинская
+
+Таблица 2: Города
+
+ID	Город	Область ID
+1	Екатеринбург	1
+2	Нижний Тагил	1
+3	Тюмень	        2
+4	Тобольск        2
+5	Челябинск	    3
+
+Таблица 3: Улицы
+
+ID	Улица	Город ID
+1	Ленина	        1
+2	Малышева	    1
+3	Карла Маркса	2
+4	Победы	        2
+5	Республики	    3
+6	Дзержинского	3
+7	Ленина	        4
+8	Октябрьская	    4
+9	Ленина	        5
+10	Комсомольская	5
+
+php artisan make:model Region --migration
+
+        Schema::create('regions', function (Blueprint $table) {
+            $table->id();
+            $table->string('Title');
+            $table->timestamps();
+        });
+
+php artisan make:model City --migration
+        
+        Schema::create('cities', function (Blueprint $table) {
+            $table->id();
+            $table->string('Title');
+            $table->integer('Region_id');
+            $table->foreign('Region_id')->references('id')->on('regions'); //Колонка связи...
+            $table->timestamps();
+        });
+
+php artisan make:model Street --migration
+
+        Schema::create('streets', function (Blueprint $table) {
+            $table->id();
+            $table->string('Title');
+            $table->integer('City_id');
+            $table->foreign('City_id')->references('id')->on('cities'); //Колонка связи...
+            $table->timestamps();
+        });
+
+
+php artisan migrate:fresh --seed
+
+В Моделях настроить связи должно быть так:
+
+app\Models\Region.php - 
+Добавить 
+    public function City()
+    {
+        //use use app\Models\City;
+        return $this->hasMany(City::class);
+    }     
+
+app\Models\City.php
+
+    public function Street()
+    {
+        return $this->hasMany(\App\Models\Street::class);
+    }     
+
+    public function Region()
+    {
+        return $this->belongsTo(\App\Models\Region::class, 'Region_id');
+    } 
+
+app\Models\Street.php
+
+    public function City()
+    {
+        return $this->belongsTo(\App\Models\City::class, 'City_id');
+    } 
+
+
+
+php artisan make:controller StreetController
+Файл app\Http\Controllers\StreetController.php
+    public function index()
+    {
+
+        //$list = \App\Models\Street::all();
+        $list = \App\Models\Street::with('City')->get();
+
+        return view("StreetView", ["list" => $list]);
+    }
+
+
+
+php artisan make:view StreetView
+Файл: resources\views\StreetView.blade.php
+В самом "view" показываем данные городов и Регионов.
+@foreach ($list as $row)
+      {{$row->Title}}
+      {{$row->City->Title}}
+      {{$row->City->Region->Title}} <br>
+@endforeach
+
+Чтобы посмотреть по адресу http://127.0.0.1:8000/street
+Правим routes\web.php
+
+Добавить 
+Route::get('/street', [\App\Http\Controllers\StreetController::class, 'index'])->name('Street');
+
+Проверяем 
+php artisan serve
+Переходим на http://127.0.0.1:8000/street
+
+
+
+
+//Новый компонент LiveWire
+
+php artisan make:livewire StreetForm
+
+Создается 2 файла
+app\Livewire\StreetForm.php
+resources\views\livewire\street-form.blade.php
+
+Добавим вывод компонента 
+В resources\views\welcome.blade.php
+@livewire('StreetForm');
+
+
+В app\Livewire\StreetForm.php
+Создаем публичную переменную
+    public $title;
+
+и меняем при рендеринге ...
+    public function render()
+    {
+        $this->title = "Привет";        
+        return view('livewire.street-form');
+    }
+
+в resources\views\livewire\street-form.blade.php
+  
+    {{$title}}
+
+
+
+Чтобы создать новый проект нужно:
+1. Скачать Composer https://getcomposer.org/
+
+php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+php -r "if (hash_file('sha384', 'composer-setup.php') === 'dac665fdc30fdd8ec78b38b9800061b4150413ff2e3b6f88543c636f7cd84f6db9189d43a81e5503cda447da73c7e5b6') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
+php composer-setup.php
+php -r "unlink('composer-setup.php');"
+
+Появится composer.phar
+
+2. Скачать установщик Laravel
+php composer.phar global require laravel/installer
+
+3. Запустить создание нового проекта Laravel имя проекта example-app5
+php composer.phar create-project laravel/laravel example-app5
+
+4. Перейти в папку проекта example-app5
+cd example-app5
+
+5. Старт 
+php artisan serve 
+
+
+Для livewire нужно:
+composer require livewire/livewire
+
+//Новый компонент LiveWire
+
+php artisan make:livewire ToDo
+
+Создается 2 файла
+CLASS: app/Livewire//ToDo.php
+VIEW:  resources\views/livewire/to-do.blade.php
+
+Добавим вывод компонента 
+В resources\views\welcome.blade.php
+@livewire('ToDo');
+
+
+В app\Livewire\ToDo.php
+Создаем публичную переменную
+    public $title;
+
+и меняем при рендеринге ...
+    public function render()
+    {
+        $this->title = "Привет";        
+        return view('livewire.to-do');
+    }
+
+в resources\views\livewire\to-do.blade.php
+  
+    {{$title}}
