@@ -10,10 +10,44 @@ class ToDo extends Component
     public $active_edit=''; //Запись которую сейчас редактируем
     public $log; //Тестовая переменная для вывода отладочной информации
 
+    public $orderby;
+    public $filter;
+    public $sort;
+    
+
+    public function mount()
+    {
+        $this->log='start';
+        $this->orderby='1';
+        $this->filter='all';
+        $this->sort='asc';
+
+    }    
+
     public function render()
     {
-        $this->todo = \App\Models\ToDo::all();
-        //$this->log= 'Вывод списка';
+
+        //->having('account_id', '>', 100)
+
+        if ($this->orderby=='2') {
+            $query = \App\Models\ToDo::orderBy('deadline',$this->sort);
+        }
+       else
+        {
+            $query = \App\Models\ToDo::orderBy('id',$this->sort);
+        }
+
+        if ($this->filter=='completed') {
+            $query = $query->where('complete', '=', 1);
+        } elseif ($this->filter=='active') {
+            $query = $query->where('complete', '=', 0);
+        } elseif ($this->filter=='has-due-date') {
+            $query = $query->where('deadline', '<>', '');
+        }
+
+
+        $this->todo = $query->get();
+
         return view('livewire.to-do');
     }
 
@@ -46,16 +80,39 @@ class ToDo extends Component
     }     
 
 
-    public function create(string $title,string $data)
+    public function create(string $title, string $data, int $priority)
     {
-        //Due date not set
-        $this->log = 'create: '.$title.' '.$data;
+        // Логируем создание новой задачи
+        $this->log = 'create: ' . $title . ' ' . $data. ' '.$priority;
 
+        // Создаем новый объект задачи
         $new = new \App\Models\Todo();
         $new->title = $title;
-        $new->priority = 0;
-        $new->complete = false; //0
-        $new->deadline = date('d M Y', strtotime($data));
+        $new->priority = $priority;
+        $new->complete = false; // Задача не выполнена
+
+        // Преобразуем строку в объект DateTime
+        $date = \DateTime::createFromFormat('d/m/Y', $data);
+        // Проверяем, успешно ли прошло преобразование
+        if ($date) {
+            // Устанавливаем срок выполнения задачи в формате "Год-месяц-день"
+            $new->deadline = $date->format('Y-m-d');
+        } else {
+            // Если преобразование не удалось, устанавливаем срок выполнения в null
+            $new->deadline = null;
+        }
+
+        // Если дата не установлена, устанавливаем срок выполнения в null
+        if ($data == 'Due date not set') {
+            $new->deadline = null;
+        }
+
+        // Сохраняем новую задачу в базе данных
         $new->save();
     }     
+
+
+    public function change_sort($title){
+        $this->sort = $title;
+    }
 }
