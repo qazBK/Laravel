@@ -30,7 +30,7 @@
                 </div>
                 <div class="col-auto px-0 mx-0 mr-2">
                     <button type="button" class="btn btn-primary"
-                    wire:click="create($refs.new_todo.value, $refs.new_date.innerText,$refs.new_priority.value)"
+                    wire:click="create($refs.new_todo.value, $refs.new_date.innerText,$refs.new_priority.value);$refs.new_todo.value='';"
                     >Add</button>
                 </div>
             </div>
@@ -46,6 +46,7 @@
                 <option value="completed">Выполненные</option>
                 <option value="active">Активные</option>
                 <option value="has-due-date">С датой</option>
+                <option value="important">Важные</option>
             </select>
         </div>
         <div class="col-auto d-flex align-items-center px-1 pr-3">
@@ -53,6 +54,7 @@
             <select class="custom-select custom-select-sm btn my-2" wire:model.change="orderby">
                 <option value="1" selected>По созданию</option>
                 <option value="2">По дате</option>
+                <option value="3">По приоритету</option>
 
             </select>
             @if ($sort == 'asc')
@@ -110,7 +112,8 @@
                         <input type="text" class="form-control form-control-lg border-0 edit-todo-input bg-transparent rounded px-3" readonly value="{{$row->title}}" title="" />
                     @endif
                 </div>
-                <div class="col-auto m-1 p-0 px-3 ">
+                @if ($row->deadline!="") 
+                <div class="col-auto m-1 p-0 px-3">
                     <div class="row">
                         <div class="col-auto d-flex align-items-center rounded bg-white border border-warning">
                             <i class="fa fa-hourglass-2 my-2 px-2 text-warning btn" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Due on date"></i>
@@ -118,6 +121,7 @@
                         </div>
                     </div>
                 </div>
+                @endif
 
                 <div class="col-auto m-1 p-0 todo-actions">
                     <div class="row d-flex align-items-center justify-content-end">
@@ -131,7 +135,7 @@
                     <div class="row todo-created-info">
                         <div class="col-auto d-flex align-items-center pr-2">
                             <i class="fa fa-info-circle my-2 px-2 text-black-50 btn" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Created date"></i>
-                            <label class="date-label my-2 text-black-50">28th Jun 2020</label>
+                            <label class="date-label my-2 text-black-50">{{ $row->created_at }}</label>
                         </div>
                     </div>
                 </div>

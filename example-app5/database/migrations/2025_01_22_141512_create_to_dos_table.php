@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->timestamps();
             $table->string('title');
-            $table->date('dedline')->nullable();
+            $table->date('deadline')->nullable();
             $table->integer('priority');
             $table->boolean('complete');
         });

@@ -32,6 +32,10 @@ class ToDo extends Component
         if ($this->orderby=='2') {
             $query = \App\Models\ToDo::orderBy('deadline',$this->sort);
         }
+       elseif ($this->orderby=='3')
+        {
+            $query = \App\Models\ToDo::orderBy('priority',$this->sort);
+        }
        else
         {
             $query = \App\Models\ToDo::orderBy('id',$this->sort);
@@ -43,6 +47,8 @@ class ToDo extends Component
             $query = $query->where('complete', '=', 0);
         } elseif ($this->filter=='has-due-date') {
             $query = $query->where('deadline', '<>', '');
+        } elseif ($this->filter=='important') {
+            $query = $query->where('priority', '=', 2);
         }
 
 
