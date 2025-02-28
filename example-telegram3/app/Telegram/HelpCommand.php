@@ -7,7 +7,7 @@ use App\Telegram\AskNameHandler;
 
 class HelpCommand extends CommandHandler
 {
-    protected static $aliases = [ '/help', '/s' ];
+    protected static $aliases = [ '/help', '/h' ];
     protected static $description = 'Send "/help" or "/h" to get "Help!"';
 
     public function handle()

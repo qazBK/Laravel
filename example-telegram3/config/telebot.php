@@ -63,7 +63,7 @@ return [
                 // Your update handlers
                // \App\Telegram\StartCommand::class,
                 \App\Telegram\HelpCommand::class,
-                //\App\Telegram\TestCommand::class,
+                \App\Telegram\SumCommand::class,
                 //\App\Telegram\AskNameHandler::class,
                 //\App\Telegram\AskFIOHandler::class,
                 \App\Telegram\BotUpdateHandler::class,
