@@ -28,7 +28,7 @@ class BotUpdateHandler extends UpdateHandler
                 'inline_keyboard' => [
                     [
                         ['text' => 'Google',
-                        'url' => 'https://google.com/'
+                        'url' => 'https://www.google.com/search?q='. $data
                         ],
                         ['text' => 'Удалить 6',
                         'callback_data' => 'test:delete:6'
