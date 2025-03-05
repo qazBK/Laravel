@@ -62,8 +62,12 @@ return [
             'handlers' => [
                 // Your update handlers
                // \App\Telegram\StartCommand::class,
+                \App\Telegram\RngCommand::class,
+                \App\Telegram\AskRngNumberHandler::class,
                 \App\Telegram\HelpCommand::class,
                 \App\Telegram\SumCommand::class,
+                \App\Telegram\AskSumN1Handler::class,
+                \App\Telegram\AskSumN2Handler::class,
                 //\App\Telegram\AskNameHandler::class,
                 //\App\Telegram\AskFIOHandler::class,
                 \App\Telegram\BotUpdateHandler::class,
