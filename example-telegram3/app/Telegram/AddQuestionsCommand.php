@@ -7,7 +7,7 @@ use App\Telegram\AskAddQuestionHandler;
 
 class AddQuestionsCommand extends CommandHandler
 {
-    protected static $aliases = [ '/addquestion' ];
+    protected static $aliases = [ '/add' ];
     protected static $description = 'Send "/addquestion" ';
 
     public function handle()
@@ -18,7 +18,7 @@ class AddQuestionsCommand extends CommandHandler
 
         \App\Telegram\DataTelegramController::set_data($chatId,'addquestion',0);
 
-        \App\Telegram\AskAddQuestionHandler::requestInput($this->bot, $userId);
+        AskAddQuestionHandler::requestInput($this->bot, $userId);
 
         return $this->sendMessage([
                 'text' => 'Введите вопрос:',

@@ -21,7 +21,7 @@ class BotUpdateHandler extends UpdateHandler
 
         // chat_id => $this->update->message->chat->id
         $data = $this->update->message()->text;
-
+        
         return $this->sendMessage([
             'text' => 'Вы написали: ' . $data,
             'reply_markup' => [
@@ -37,6 +37,6 @@ class BotUpdateHandler extends UpdateHandler
                     ]
                 ]   
 
-        ]);
+        ]); 
     }
 }
