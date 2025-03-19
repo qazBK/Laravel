@@ -72,11 +72,12 @@ return [
                 \App\Telegram\ButtonQuestionsHandler::class,
                 \App\Telegram\AskSumN1Handler::class,
                 \App\Telegram\AskSumN2Handler::class,
-
+                
                 //\App\Telegram\AskAddQuestionHandler::class,
                 //\App\Telegram\AskNameHandler::class,
                 //\App\Telegram\AskFIOHandler::class,
                 \App\Telegram\BotUpdateHandler::class,
+                \App\Telegram\BotUpdateImageHandler::class,
                 //\App\Telegram\ButtonPressHandler::class,
             ],
         ],

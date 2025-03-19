@@ -27,7 +27,7 @@ class ButtonQuestionsHandler extends CallbackHandler
                 'text' => 'Ответ правильный '
             ]);
             $this->sendMessage([
-                'text' => 'Баллы: '
+                'text' => 'Баллы: '. $scores
             ]);
         } else {
             $this->sendMessage([
@@ -81,6 +81,7 @@ class ButtonQuestionsHandler extends CallbackHandler
     }
     else
     {
+        \App\Telegram\DataTelegramController::set_data($chatId,'scores',1);
         //Нет вопросов...
         return $this->sendMessage([
             'text' => 'Вопросы закончились... ',

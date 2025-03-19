@@ -11,7 +11,7 @@ class BotUpdateHandler extends UpdateHandler
     public function trigger(): bool
     {
         //Когда нужно обрабатывать...
-        return isset($this->update->message); // handle regular messages (example)
+        return isset($this->update->message->text); // handle regular messages (example)
     }
 
     public function handle()
