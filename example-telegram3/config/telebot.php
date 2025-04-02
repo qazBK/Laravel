@@ -62,9 +62,12 @@ return [
             'handlers' => [
                 // Your update handlers
                // \App\Telegram\StartCommand::class,
+                \App\Telegram\FotoCommand::class,
                 \App\Telegram\RngCommand::class,
                 \App\Telegram\AskRngNumberHandler::class,
-                \App\Telegram\FotoCommand::class,
+                \App\Telegram\AskFotoAlbumAddHandler::class,
+                \App\Telegram\BotUpdateImageFotoAlbumLoaderHandler::class,
+                \App\Telegram\FotoButtonPressHandler::class,
                 \App\Telegram\HelpCommand::class,
                 \App\Telegram\SumCommand::class,
                 \App\Telegram\TestQuestionsCommand::class,
