@@ -62,6 +62,9 @@ return [
             'handlers' => [
                 // Your update handlers
                // \App\Telegram\StartCommand::class,
+               \App\Telegram\SendCommand::class,
+               \App\Telegram\AskSendMessageHandler::class,
+               \App\Telegram\StartCommand::class,
                 \App\Telegram\FotoCommand::class,
                 \App\Telegram\RngCommand::class,
                 \App\Telegram\AskRngNumberHandler::class,

@@ -2,6 +2,8 @@
 
 namespace App\Telegram;
 //use Illuminate\Http\Request;
+
+use Illuminate\Support\Facades\DB;
 class DataTelegramController
 {
     //
@@ -22,7 +24,7 @@ class DataTelegramController
         }
     }
     static public function get_data($bot_id, $name, $default_value)
-    {
+    {              
 
         $list = \App\Models\DataTelegramBot::where('bot_id', $bot_id)->first();
         if ($list === null) {
@@ -36,4 +38,19 @@ class DataTelegramController
             }
         }
     }
+
+    static public function set_telegram_user($chat_id, $username)
+    {
+        //use Illuminate\Support\Facades\DB;
+
+        $list = \App\Models\TelegramChat::where('chat_id', $chat_id)->first();
+        if ($list === null) {
+            $list = new \App\Models\TelegramChat;
+            $list->chat_id = $chat_id;
+            $list->username = $username;
+            $list->save();
+
+        }
+    }
+
 }
